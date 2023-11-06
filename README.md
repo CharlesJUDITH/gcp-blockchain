@@ -28,8 +28,33 @@ By leveraging Terraform for GKE deployments, you benefit from repeatable process
 
 The Terraform state file will be hosted in a GCS (Google Cloud Storage) bucket, and they will be created with Terraform.
 
-# Create GKE public cluster
+PR: https://github.com/CharlesJUDITH/gcp-blockchain/pull/1
 
+# Create GKE public cluster and GKE private cluster
+
+PR: https://github.com/CharlesJUDITH/gcp-blockchain/pull/2
+
+For the test purposes, some small nodes were deployed but for production server use biggers servers like:
+
+```
+resource "google_compute_instance" "high_mem_instance" {
+  name         = "high-mem-instance"
+  machine_type = "n2-highmem-32" # This is an example machine type with 32 vCPUs and 256 GB of memory.
+  zone         = var.zone
+
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-9"
+      size  = 500 # Size of the boot disk in GB.
+    }
+  }
+
+  # Additional disks
+  attached_disk {
+    source      = google_compute_disk.additional_disk.id
+  }
+....
+```
 
 # Install ArgoCD
 
@@ -57,7 +82,10 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/st
 kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
 ```
 
-# Install Prometheus Operator
+# Install Prometheus Operator with ArgoCD
+
+https://github.com/CharlesJUDITH/gcp-blockchain/tree/main/argocd
+
 
 # Configure ArgoCD monitoring
 
