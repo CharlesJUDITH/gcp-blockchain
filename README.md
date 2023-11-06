@@ -63,7 +63,26 @@ kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}
 
 # Install blockchain node
 
+The blockchain node is packaged in a [Helm chart](https://github.com/StakeLab-Zone/StakeLab/tree/main/Charts/evmos) and it will be deployed with ArgoCD.
+Peristent storage will be used, statefulset so we keep the data if the pod is restarted.
+
+There's a custom Docker images which is downloading the latest polkachu snapshot in the initContainer (when evmos home directory is not created). There's a DEBUG env variables to set to true for debugging purposes.
+
+The fullnode mode requires no key management.
+The validator mode requires key management and we can use regular Kubernetes Secrets or GCP Secret Manager and ESO (external Secret Operator) to add them as a secret in the blockchain node pod.
+
+Some solutions like Horcux or TMKMS coule be used for the key as well.
+
+If the node is a validator, there will be no ingress or endpoint exposed over internet.
+
 # Configure blockchain node monitoring
+
+[Tenderduty](https://github.com/StakeLab-Zone/StakeLab/tree/main/Charts/tenderduty) will be used to monitor the validator (if the node is a validator), it requires the valoper address and a RPC node with websocket connection.
+
+Evmos exposes some metrics, we can create a Service Monitor to re-use those metrics with the prometheus-operator stack.
+
+```
+```
 
 # Add private cluster in ArgoCD
 
@@ -108,3 +127,14 @@ spec:
             port:
               name: https
 ```
+
+## Scaling the blockchain node
+
+There are multiple solutions to scale the blockchain node based on their role.
+
+### Fullnode
+
+Use a frontend cache like [Cosmos endpoint cache](https://github.com/StakeLab-Zone/StakeLab/tree/main/Charts/cosmos-endpoint-cache) on top of the fullnodes.
+Websocket are not handled, it requires som additional configuration (Ingress), it's not wroking really well with some tools like Restake.
+
+Use multiple fullnode instances and add a LoadBlancer on the top to share the load between the nodes, use geo-loacation to optimize the traffic.
