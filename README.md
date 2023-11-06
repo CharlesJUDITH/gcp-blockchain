@@ -97,7 +97,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: evmos-fullnode
+      app.kubernetes.io/instance: evmos
   namespaceSelector:
     matchNames:
     - evmos
