@@ -162,6 +162,8 @@ Some solutions like Horcux or TMKMS coule be used for the key as well.
 
 If the node is a validator, there will be no ingress or endpoint exposed over internet.
 
+**Note: As the node is running a namespace, it's isolated from the outside world by default (no ingress).**
+
 # Configure blockchain node monitoring
 
 [Tenderduty](https://github.com/StakeLab-Zone/StakeLab/tree/main/Charts/tenderduty) will be used to monitor the validator (if the node is a validator), it requires the valoper address and a RPC node with websocket connection.
@@ -216,6 +218,8 @@ The workflow will be like:
 ## ArgoCD
 
 Create an ingress and use cert-manager to generate letsencrypt certificate.
+
+For example:
 ```
 apiVersion: networking.k8s.io/v1
 kind: Ingress
