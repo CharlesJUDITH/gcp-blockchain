@@ -79,10 +79,36 @@ If the node is a validator, there will be no ingress or endpoint exposed over in
 
 [Tenderduty](https://github.com/StakeLab-Zone/StakeLab/tree/main/Charts/tenderduty) will be used to monitor the validator (if the node is a validator), it requires the valoper address and a RPC node with websocket connection.
 
+Requirements:
+- telemetry.enabled = true
+- Evmos service is having port 26660 with the name metrics
+
 Evmos exposes some metrics, we can create a Service Monitor to re-use those metrics with the prometheus-operator stack.
 
+evmos-svcmonitor.yaml:
 ```
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: evmos-metrics
+  namespace: observability
+  labels:
+    release: kube-prom-stack
+spec:
+  selector:
+    matchLabels:
+      app: evmos-fullnode
+  namespaceSelector:
+    matchNames:
+    - evmos
+  endpoints:
+  - port: metrics
+    interval: 60s
+  jobLabel: app.kubernetes.io/name
 ```
+
+Create the Service monitor
+`kubectl create -f evmos-svcmonitor.yaml`
 
 # Add private cluster in ArgoCD
 
