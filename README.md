@@ -61,6 +61,65 @@ kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}
 
 # Configure ArgoCD monitoring
 
+Create service monitor to fetch ArgoCD metrics.
+
+argocd-scv-mpnitor.yaml:
+```
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: argocd-metrics
+  labels:
+    release: prometheus-operator
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: argocd-metrics
+  endpoints:
+  - port: metrics
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: argocd-server-metrics
+  labels:
+    release: prometheus-operator
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: argocd-server-metrics
+  endpoints:
+  - port: metrics
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: argocd-repo-server-metrics
+  labels:
+    release: prometheus-operator
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: argocd-repo-server
+  endpoints:
+  - port: metrics
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: argocd-applicationset-controller-metrics
+  labels:
+    release: prometheus-operator
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: argocd-applicationset-controller
+  endpoints:
+  - port: metrics
+```
+
+`kubectl -f create argocd-scv-mpnitor.yaml -n observaility`
+
 # Install blockchain node
 
 The blockchain node is packaged in a [Helm chart](https://github.com/StakeLab-Zone/StakeLab/tree/main/Charts/evmos) and it will be deployed with ArgoCD.
@@ -164,3 +223,9 @@ Use a frontend cache like [Cosmos endpoint cache](https://github.com/StakeLab-Zo
 Websocket are not handled, it requires som additional configuration (Ingress), it's not wroking really well with some tools like Restake.
 
 Use multiple fullnode instances and add a LoadBlancer on the top to share the load between the nodes, use geo-loacation to optimize the traffic.
+
+### Validator
+
+Use TMKMS or Horcux to improve the block signing security.
+
+Add Sentry node to sync with the blockchain and a dedicated pod for block signing.
