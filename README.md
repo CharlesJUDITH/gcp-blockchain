@@ -24,11 +24,11 @@ Terraform can help you manage costs by giving you the ability to codify and revi
 
 By leveraging Terraform for GKE deployments, you benefit from repeatable processes, greater consistency, and the ability to integrate with existing CI/CD pipelines, which can significantly enhance the overall productivity and reliability of your operations.
 
-## Create GCS bucket for Terraform state file
+## Create GCS bucket for Terraform state file for both cluster
+
+The Terraform state file will be hosted in a GCS (Google Cloud Storage) bucket, and they will be created with Terraform.
 
 # Create GKE public cluster
-
-## Create GCS bucket for Terraform state file
 
 
 # Install ArgoCD
