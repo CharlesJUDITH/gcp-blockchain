@@ -153,7 +153,11 @@ spec:
 The blockchain node is packaged in a [Helm chart](https://github.com/StakeLab-Zone/StakeLab/tree/main/Charts/evmos) and it will be deployed with ArgoCD.
 Peristent storage will be used, statefulset so we keep the data if the pod is restarted.
 
-There's a custom Docker images which is downloading the latest polkachu snapshot in the initContainer (when evmos home directory is not created). There's a DEBUG env variables to set to true for debugging purposes.
+There's a custom Docker image which is downloading the latest polkachu snapshot in the initContainer (when evmos home directory is not created). There's a DEBUG env variables to set to true for debugging purposes.
+
+The docker image is fecting a Github releases in the EVmos project and package a docker images with some tools inside. Each there's a new release, a new docker image is built like https://github.com/akash-network/cosmos-omnibus/pull/664 for the latest release.
+
+[Evmos fullnode app example](https://github.com/CharlesJUDITH/gcp-blockchain/blob/main/argocd/evmos-fullnode-app.yaml)
 
 The fullnode mode requires no key management.
 The validator mode requires key management and we can use regular Kubernetes Secrets or GCP Secret Manager and ESO (external Secret Operator) to add them as a secret in the blockchain node pod.
