@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: evmos-fullnode
+  namespace: evmos
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/StakeLab-Hub/StakeLab'
+    path: Charts/evmos
+    targetRevision: HEAD
+    helm:
+      parameters:
+        - name: evmos_node.moniker
+          value: Moniker
+        - name: fullnode.enabled
+          value: 'true'
+        - name: validator.enabled
+          value: 'false'
+        - name: image.tag
+          value: v0.4.1-rc1-evmos-v15.0.0
+        - name: evmos_node.telemetry.enabled
+          value: 'true'
+  destination:
+    # name of the GKE cluster should be added here
+    server: 'https://kubernetes.default.svc'
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
