@@ -146,7 +146,7 @@ spec:
   - port: metrics
 ```
 
-`kubectl -f create argocd-scv-mpnitor.yaml -n observaility`
+`kubectl -f create argocd-scv-mpnitor.yaml -n observability`
 
 # Install blockchain node
 
@@ -213,6 +213,7 @@ argocd cluster add cluster-2-prod-private
 # Improvements
 
 ## Terraform 
+
 Use Atlantis or equivalent to deploy the Terraform code. This is mainly why we are using GCS for the Terraform state file.
 The workflow will be like:
 - Open new PR -> atlantis plan (to show the terraform plan)
