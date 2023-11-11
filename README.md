@@ -6,7 +6,7 @@ Demo on how to run blockchain nodes in GCP with GKE.
 
 To create the cloud resources, terraform will be used for multiple reasons:
 
-Terraform allows you to define your infrastructure in configuration files that can be versioned, reused, and shared. Unlike manual cluster creation or using imperative commands, IaC helps in maintaining consistency and accountability in infrastructure deployment.
+Terraform allows you to define your infrastructure in configuration files that can be versioned, reused, and shared. Unlike manual cluster creation or using imperative commands, IaC (Infrastructure as a Code) helps in maintaining consistency and accountability in infrastructure deployment.
 
 Terraform configurations are idempotent, meaning that you can apply them multiple times and get the same result. This is particularly important for maintaining the desired state of your infrastructure. If something changes unexpectedly, Terraform can be rerun to correct the discrepancy.
 
